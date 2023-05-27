@@ -11,6 +11,7 @@ use App\Http\Controllers\TurnoController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
+
 Route::get('/categorias/create', [CategoriaController::class, 'create'])->name('new-categoria');
 Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
 Route::get('/categorias/{id}/edit', [CategoriaController::class, 'edit'])->name('edit-categoria');
