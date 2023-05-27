@@ -27,7 +27,7 @@
 </head>
 @if(!$categorias)
     <script type="text/javascript">
-        window.location = "{ url('/new-categoria') }";//here double curly bracket
+        window.location = "{ url('/categorias/create') }";//here double curly bracket
     </script>
 @else
     <body>

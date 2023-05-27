@@ -50,11 +50,6 @@
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
                 <li><a class="nav-link scrollto active" href="#hero">Inicio</a></li>
-                @if($categorias)
-                    @foreach($categorias as $categoria)
-                        <li><a class="nav-link scrollto" href="#{{strtolower($categoria->name)}}">{{$categoria->name}}</a></li>
-                    @endforeach
-                @endif
                 <li><a class="nav-link scrollto" href="#contact">Visítanos</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>

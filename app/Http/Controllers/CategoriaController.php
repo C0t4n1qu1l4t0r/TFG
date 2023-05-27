@@ -15,8 +15,7 @@ class CategoriaController extends Controller
 
     public function create()
     {
-        $categorias = Categoria::all();
-        return view('new-categoria',compact('categorias'));
+        return view('new-categoria');
     }
 
     public function store(Request $request)
