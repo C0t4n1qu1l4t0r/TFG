@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://restaurantelamirilla.es%{REQUEST_URI} [L,R=301]
