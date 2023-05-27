@@ -33,9 +33,8 @@ class CategoriaController extends Controller
 
     public function edit($id)
     {
-        $categorias = Categoria::all();
         $categoria = Categoria::findOrFail($id);
-        return view('edit-categoria', compact('categoria','categorias'));
+        return view('edit-categoria', compact('categoria'));
     }
 
     public function update(Request $request, $id)
