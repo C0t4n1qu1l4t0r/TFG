@@ -82,7 +82,7 @@
                                 <h2 class="animate__animated animate__fadeInDown"><span>Restaurante la Mirilla de Edy</span></h2>
                                 <p class="animate__animated animate__fadeInUp"></p>
                                 <div>
-                                    <a href="#{{$categorias[0]->name}}" class="btn-menu animate__animated animate__fadeInUp scrollto">Nuestra Carta</a>
+                                    <a href="#menu" class="btn-menu animate__animated animate__fadeInUp scrollto">Nuestra Carta</a>
                                 </div>
                             </div>
                         </div>
