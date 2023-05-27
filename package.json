@@ -14,7 +14,7 @@
         "isotope-layout": "^3.0.6"
     },
     "engines": {
-        "node": "18.13",
+        "node": "18.13.0",
         "npm": "9.3.1"
     }
 }
