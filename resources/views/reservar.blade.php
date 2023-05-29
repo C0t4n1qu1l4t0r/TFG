@@ -62,6 +62,7 @@
                 @if($authenticated)
                     <li><a class="nav-link" href="/users">Bienvenido {{Auth::user()->name}}</a></li>
                     <li><a class="nav-link" href="/reservas">Ver Reservas</a></li>
+                    <li><a class="nav-link" href="/reservar">Reservar</a></li>
                     <li><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
                     @if(Auth::user()->rol == 0)
                         <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
@@ -90,6 +91,11 @@
                             @endforeach
                         </select>
                     </div>
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <div>
                         <label for="numPersonas">Número de comensales:</label>
                         <input type="text" name="numPersonas" id="numPersonas" required>

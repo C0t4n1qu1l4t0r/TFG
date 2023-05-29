@@ -87,9 +87,11 @@ class PlatoController extends Controller
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $imageName = time() . '_' . $imageFile->getClientOriginalName();
-            $imagePath = public_path('images');
-            $imageFile->move($imagePath, $imageName);
-            $plato->image = $imageName;
+            $imagePath = asset('images/' . $imageName);
+
+            if ($imageFile->move(public_path('images'), $imageName)) {
+                $plato['image'] = $imagePath;
+            }
         }
 
         $plato->name = $request->get('name');

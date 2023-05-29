@@ -68,6 +68,7 @@
                     @if($authenticated)
                         <li><a class="nav-link" href="/users">Bienvenido {{Auth::user()->name}}</a></li>
                         <li><a class="nav-link" href="/reservas">Ver Reservas</a></li>
+                        <li><a class="nav-link" href="/reservar">Reservar</a></li>
                         <li><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
                         @if(Auth::user()->rol == 0)
                             <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
@@ -141,26 +142,37 @@
                                 @foreach($platos as $plato)
                                     @if($plato->type_id == $tipo->id && $plato->category_id == $categoria->id)
                                         <div @if($categoria->name == "Menú") class="menu-content" @else class="almuerzo-content" @endif>
-                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#imageModal{{$plato->id}}">{{$plato->name}}</a>
-                                            <span>{{$plato->price}}€</span>
+                                            <a href="javascript:void(0)" onclick="openModal({{ $plato->id }})">{{ $plato->name }}</a>
+                                            <span>{{ $plato->price }}€</span>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="imageModal{{$plato->id}}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel{{$plato->id}}" aria-hidden="true">
+                                            <div id="imageModal{{ $plato->id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel{{ $plato->id }}" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="imageModalLabel{{$plato->id}}">{{$plato->name}} Image</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <h5 class="modal-title" id="imageModalLabel{{ $plato->id }}">{{ $plato->name }} Image</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal({{ $plato->id }})">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <img src="{{$plato->image}}" alt="{{$plato->name}} Image" class="img-fluid">
+                                                            <img id="modalImage{{ $plato->id }}" src="{{ $plato->image }}" alt="{{ $plato->name }} Image" class="img-fluid">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            <script>
+                                                function openModal(id) {
+                                                    var modal = document.getElementById('imageModal' + id);
+                                                    modal.style.display = 'block';
+                                                }
+
+                                                function closeModal(id) {
+                                                    var modal = document.getElementById('imageModal' + id);
+                                                    modal.style.display = 'none';
+                                                }
+                                            </script>
                                         </div>
                                         <div @if($categoria->name == "Menú") class="menu-ingredients" @else class="almuerzo-ingredients" @endif>
                                             @if($plato->ingredients)
