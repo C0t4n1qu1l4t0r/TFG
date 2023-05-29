@@ -43,7 +43,7 @@ class AlergenoController extends Controller
         if ($request->hasFile('image')) {
             $imageFile = $request->file('image');
             $imageName = time() . '_' . $imageFile->getClientOriginalName();
-            $imagePath = asset('images/' . $imageName);
+            $imagePath = $imageName;
 
             if ($imageFile->move(public_path('images'), $imageName)) {
                 $validatedData['image'] = $imagePath;

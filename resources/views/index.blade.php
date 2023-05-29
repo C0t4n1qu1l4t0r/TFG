@@ -156,7 +156,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <img id="modalImage{{ $plato->id }}" src="{{ $plato->image }}" alt="{{ $plato->name }} Image" class="img-fluid">
+                                                            <img id="modalImage{{ $plato->id }}" src="{{asset('images/'.$plato->image)}}" alt="{{ $plato->name }} Image" class="img-fluid">
                                                         </div>
                                                     </div>
                                                 </div>
