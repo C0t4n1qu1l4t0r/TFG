@@ -146,7 +146,7 @@
                                             <span>{{ $plato->price }}€</span>
 
                                             <!-- Modal -->
-                                            <div id="imageModal{{ $plato->id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel{{ $plato->id }}" hidden>
+                                            <div id="imageModal{{ $plato->id }}" class="modal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel{{ $plato->id }}" hidden>
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
