@@ -151,7 +151,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="imageModalLabel{{ $plato->id }}">{{ $plato->name }} Image</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal({{ $plato->id }})">
+                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal({{ $plato->id }})">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
@@ -166,11 +166,13 @@
                                                 function openModal(id) {
                                                     var modal = document.getElementById('imageModal' + id);
                                                     modal.style.display = 'block';
+                                                    modal.hidden = false;
                                                 }
 
                                                 function closeModal(id) {
                                                     var modal = document.getElementById('imageModal' + id);
                                                     modal.style.display = 'none';
+                                                    modal.hidden = true;
                                                 }
                                             </script>
                                         </div>
