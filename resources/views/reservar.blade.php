@@ -61,6 +61,7 @@
                 <li><a class="nav-link scrollto" href="#contact">Visítanos</a></li>
                 @if($authenticated)
                     <li><a class="nav-link" href="/users">Bienvenido {{Auth::user()->name}}</a></li>
+                    <li><a class="nav-link" href="/reservas">Ver Reservas</a></li>
                     <li><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
                     @if(Auth::user()->rol == 0)
                         <li><a class="nav-link" href="/dashboard">Dashboard</a></li>

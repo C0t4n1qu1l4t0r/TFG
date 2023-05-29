@@ -67,6 +67,7 @@
                     <li><a class="nav-link scrollto" href="#contact">Visítanos</a></li>
                     @if($authenticated)
                         <li><a class="nav-link" href="/users">Bienvenido {{Auth::user()->name}}</a></li>
+                        <li><a class="nav-link" href="/reservas">Ver Reservas</a></li>
                         <li><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
                         @if(Auth::user()->rol == 0)
                             <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
@@ -134,7 +135,7 @@
                         <div @if($categoria->name == "Menú") class="row menu-container" @else class="row almuerzo-container" @endif>
                             @foreach($tipos as $tipo)
                                 @if ($tipo->categoria_id == $categoria->id)
-                                    <div class="col-lg-4 menu-item filter-{{strtolower($tipo->name)}} mt-2">
+                                    <div class="col-lg-4 menu-item filter-{{strtolower($tipo->name)}} my-2">
                                         <h2 style="text-align: center;">{{$tipo->name}}</h2>
                                 @endif
                                 @foreach($platos as $plato)
