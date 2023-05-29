@@ -136,7 +136,7 @@
                         <div @if($categoria->name == "Menú") class="row menu-container" @else class="row almuerzo-container" @endif>
                             @foreach($tipos as $tipo)
                                 @if ($tipo->categoria_id == $categoria->id)
-                                    <div class="col-lg-4 menu-item filter-{{strtolower($tipo->name)}} my-2">
+                                    <div @if($categoria->name == "Menú") class="col-lg-4 menu-item filter-{{strtolower($tipo->name)}} my-2" @else class="col-lg-4 almuerzo-item filter-{{strtolower($tipo->name)}} my-2" @endif style="flex: 0 0 33%">
                                         <h2 style="text-align: center;">{{$tipo->name}}</h2>
                                 @endif
                                 @foreach($platos as $plato)

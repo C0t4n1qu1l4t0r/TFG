@@ -91,7 +91,7 @@
                         <div class="d-flex flex-column {{ $loop->count > 1 ? 'col-4' : 'col-6 offset-3 align-items-center' }}">
                             <strong class="px-5">{{$reserva->fecha}}</strong>
                             <p>Número de comensales: {{$reserva->numPersonas}}</p>
-                            <p>Hora de la Reserva:{{ $reserva->turno->hora }}</p>
+                            <p>Hora de la Reserva: {{ $reserva->turno->hora }}</p>
                         </div>
 
                     @endforeach
