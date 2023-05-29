@@ -1,10 +1,4 @@
-import './bootstrap';
-/**
- * Template Name: Delicious - v4.9.1
- * Template URL: https://bootstrapmade.com/delicious-free-restaurant-bootstrap-theme/
- * Author: BootstrapMade.com
- * License: https://bootstrapmade.com/license/
- */
+import './bootstrap.js';
 (function() {
     "use strict";
 
@@ -95,6 +89,7 @@ import './bootstrap';
             }
         }
         window.addEventListener('load', headerScrolled)
+        console.log(selectHeader);
         onscroll(document, headerScrolled)
     }
 

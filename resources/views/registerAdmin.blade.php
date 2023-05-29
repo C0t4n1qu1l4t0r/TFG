@@ -74,7 +74,7 @@
 <div class="container" style="margin-top: 200px;">
     <div class="row">
         <div class="col-6 offset-3">
-            <form action="{{ route('register') }}" method="POST">
+            <form action="{{ route('registerAdmin') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="name">Nombre del Usuario:</label>
@@ -90,11 +90,8 @@
                     <label for="password">Contraseña:</label>
                     <input type="password" name="password" id="password" class="form-control" required>
                 </div>
-                <div class="d-flex flex-row" >
-                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-                    <p class="px-1" style="padding-top: 7px">O</p>
-                    <a href="/login" class="btn btn-primary">Iniciar Sesión</a>
-                </div>
+
+                <button type="submit" class="btn btn-primary">Registrarse</button>
             </form>
         </div>
     </div>

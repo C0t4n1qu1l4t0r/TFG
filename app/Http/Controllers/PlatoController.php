@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Alergeno;
 use App\Models\Categoria;
 use App\Models\Plato;
+use App\Models\Tipo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PlatoController extends Controller
 {
@@ -19,14 +22,17 @@ class PlatoController extends Controller
     public function create()
     {
         $categorias = Categoria::all();
-        return view('new',compact('categorias'));
+        $tipos = Tipo::all();
+        $alergenos = Alergeno::all();
+        $authenticated = Auth::check();
+        return view('platos/new',compact('categorias','authenticated','tipos','alergenos'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'ingredients' => 'required',
+            'ingredients' => 'nullable',
             'price' => 'required|numeric',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'type_id' => 'required',
@@ -34,9 +40,16 @@ class PlatoController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $validatedData['image'] = $imagePath;
+            $imageFile = $request->file('image');
+            $imageName = time() . '_' . $imageFile->getClientOriginalName();
+            $imagePath = public_path('images') . '/' . $imageName;
+
+            if (!file_exists($imagePath)) {
+                $imageFile->move(public_path('images'), $imageName);
+                $validatedData['image'] = $imageName;
+            }
         }
+
         $plato = Plato::create($validatedData);
 
         $alergenos = $request->input('alergenos');
@@ -45,36 +58,37 @@ class PlatoController extends Controller
         }
 
         return redirect()->route('index')
-            ->with('success','Plato created successfully.');
+            ->with('success', 'Plato created successfully.');
     }
 
 
-    public function edit(Plato $plato)
+    public function edit($id)
     {
         $alergenos = Alergeno::all();
+        $tipos = Tipo::all();
         $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        $plato = Plato::findOrFail($id);
 
-        return view('platos.edit', compact('plato', 'alergenos','categorias'));
+        return view('platos/edit', compact('plato', 'alergenos','categorias','authenticated','tipos'));
     }
 
-    public function update(Request $request, Plato $plato)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required',
-            'ingredients' => 'required',
+            'ingredients' => 'nullable',
             'price' => 'required|numeric',
             'type_id' => 'required',
             'category_id' => 'required',
         ]);
+        $plato = Plato::findOrFail($id);
 
-        if ($request->has('image')) {
-            $request->validate([
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
-
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
-
+        if ($request->hasFile('image')) {
+            $imageFile = $request->file('image');
+            $imageName = time() . '_' . $imageFile->getClientOriginalName();
+            $imagePath = public_path('images');
+            $imageFile->move($imagePath, $imageName);
             $plato->image = $imageName;
         }
 
@@ -91,15 +105,23 @@ class PlatoController extends Controller
             $plato->alergenos()->sync($alergenos);
         }
 
-        return redirect()->route('platos.index')
+        return redirect()->route('index')
             ->with('success','Plato updated successfully');
     }
 
-    public function destroy(Plato $plato)
+    public function delete($id){
+        $plato = Plato::findOrFail($id);
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('platos/delete', compact('plato','categorias','authenticated'));
+    }
+
+    public function destroy($id)
     {
+        $plato = Plato::findOrFail($id);
         $plato->delete();
 
-        return redirect()->route('platos.index')
+        return redirect()->route('index')
             ->with('success','Plato deleted successfully');
     }
 }

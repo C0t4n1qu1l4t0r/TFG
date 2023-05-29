@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,24 @@ class UserController extends Controller
      */
     public function index()
     {
+
         $users = User::all();
 
-        return view('users', compact('users'));
+        return $users;
+    }
+
+    public function users(){
+
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+
+        if (Auth::user()->rol == 0) {
+            $users = User::all();
+        } else {
+            $users = User::where('id', Auth::id())->get();
+        }
+
+        return view('users/index',compact('users','categorias','authenticated'));
     }
 
     /**
@@ -29,77 +45,80 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('new');
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+
+        return view('register', compact('categorias', 'authenticated'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function createAdmin()
     {
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->rol = $request->rol;
-        $user->save();
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
 
-        return redirect()->route('users')->with('success', 'User created successfully.');
+        return view('registerAdmin', compact('categorias', 'authenticated'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return view('user', compact('user'));
-    }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
-        return view('edit', compact('user'));
+        $user = User::findOrFail($id);
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+
+        return view('users/edit', compact('user', 'categorias', 'authenticated'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->rol = $request->rol;
+        $user = User::findOrFail($id);
+        $user->name = $request->name ?? $user->name;
+        $user->email = $request->email ?? $user->email;
+        $user->password = $request->password ?? $user->password;
         $user->save();
 
-        return redirect()->route('users')->with('success', 'User updated successfully.');
+        return redirect()->route('users/index')->with('success', 'User updated successfully.');
+    }
+
+    public function delete($id)
+    {
+        $user = User::findOrFail($id);
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('users/delete', compact('user', 'categorias', 'authenticated'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('users')->with('success', 'User deleted successfully.');
+        if (Auth::id() == $user->id) {
+            Auth::logout();
+            return redirect()->route('index')->with('success', 'User deleted successfully.');
+        } else {
+            return redirect()->route('users/index')->with('success', 'User deleted successfully.');
+
+        }
     }
 
     /**
@@ -109,13 +128,16 @@ class UserController extends Controller
      */
     public function showLoginForm()
     {
-        return view('login');
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+
+        return view('login', compact('categorias', 'authenticated'));
     }
 
     /**
      * Handle an authentication attempt.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -126,32 +148,20 @@ class UserController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
         if (Auth::attempt($credentials)) {
-            // Authentication successful
-            return redirect('/');
+
+            return redirect()->route('index');
         }
 
-        // Authentication failed
         throw ValidationException::withMessages([
             'email' => ['The provided credentials are incorrect.'],
         ]);
     }
 
     /**
-     * Show the registration form.
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function showRegistrationForm()
-    {
-        return view('register');
-    }
-
-    /**
      * Handle a registration request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -161,7 +171,26 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'rol' => ['nullable', 'numeric'],
+            'password' => ['required'],
+        ]);
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'rol' => $validatedData['rol'] ?? 1,
+            'password' => Hash::make($validatedData['password']),
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('index');
+    }
+
+    public function registerAdmin(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required'],
         ]);
 
@@ -174,14 +203,14 @@ class UserController extends Controller
 
         Auth::login($user);
 
-        return redirect('/');
+        return redirect()->route('index');
     }
 
     public function logout()
     {
         Auth::logout();
 
-        return redirect('/'); // Redirect to the desired logout destination
+        return redirect()->route('index');
     }
 
 }

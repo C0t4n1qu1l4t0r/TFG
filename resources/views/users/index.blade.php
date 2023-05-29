@@ -83,15 +83,15 @@
     @if($authenticated)
         <section class="container-fluid d-flex flex-row flex-wrap">
             <section class="col-12">
-                <h2 class="text-center">Sus Reservas</h2>
+                <h2 class="text-center">Su Perfil</h2>
                 <div class="row">
-                    @foreach($reservas as $reserva)
-                        <div class="d-flex flex-column {{ $loop->count > 1 ? 'col-4' : 'col-6 offset-3 align-items-center' }}">
-                            <strong class="px-5">{{$reserva->fecha}}</strong>
-                            <p>Número de comensales: {{$reserva->numPersonas}}</p>
-                            <p>Hora de la Reserva:{{ $reserva->turno->hora }}</p>
+                    @foreach($users as $user)
+                        <div class="d-flex flex-column {{ $loop->count > 1 ? 'col-4' : 'col-6 offset-3' }}">
+                            <strong class="px-5">{{$user->name}}</strong>
+                            <p>Su correo: {{$user->email}}</p>
+                            <p>Por motivos de seguridad le ocultaremos su contraseña, si desea restablecerla acceda <a href="/users/{{Auth::id()}}/edit">aquí</a></p>
+                            <p>Si desea eliminar su cuenta puede hacerlo accediendo <a href="/users/{{Auth::id()}}/delete">aquí</a></p>
                         </div>
-
                     @endforeach
                 </div>
             </section>

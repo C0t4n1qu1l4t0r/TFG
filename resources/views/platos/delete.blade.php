@@ -18,7 +18,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/animate.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/bootstrap-icons.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap-icons.css')}}">
     <link rel="stylesheet" href="{{asset('css/boxicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/glightbox.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/swiper-bundle.min.css')}}">
@@ -30,9 +30,9 @@
 <section id="topbar" class="d-flex align-items-center fixed-top topbar-transparent">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-center justify-content-lg-start">
         <a href="https://www.instagram.com/restaurantelamirilladeedy/"><i style="font-size: 23px;"
-                                                                          class="bx bxl-instagram ms-4 d-none d-lg-flex align-items-center"></i></a>
+                                                                          class="bi bi-instagram ms-4 d-none d-lg-flex align-items-center"></i></a>
         <a href="https://www.facebook.com/profile.php?id=100086663724470"><i style="font-size: 23px;"
-                                                                             class="bx bxl-facebook ms-4 d-none d-lg-flex align-items-center"></i></a>
+                                                                             class="bi bi-facebook ms-4 d-none d-lg-flex align-items-center"></i></a>
         <i class="bi bi-phone ms-4 d-none d-lg-flex align-items-center d-none"><a style="color: white;" class="ps-1"
                                                                                   href="tel:919 47 72 18">919 47 72 18</a></i>
         <i class="bi bi-clock ms-4 d-none d-lg-flex align-items-center"><span>Lunes a Viernes: 07.00-00.00 y Sábado
@@ -49,32 +49,49 @@
 
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
-                <li><a class="nav-link scrollto active" href="#hero">Inicio</a></li>
+                <li><a class="nav-link scrollto active" href="/">Inicio</a></li>
+                @if($categorias)
+                    @foreach($categorias as $categoria)
+                        <li><a class="nav-link scrollto" href="#{{strtolower($categoria->name)}}">{{$categoria->name}}</a></li>
+                    @endforeach
+                @endif
                 <li><a class="nav-link scrollto" href="#contact">Visítanos</a></li>
+                @if($authenticated)
+                    <li><a class="nav-link" href="/users">Bienvenido {{Auth::user()->name}}</a></li>
+                    <li><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
+                    @if(Auth::user()->rol == 0)
+                        <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    @endif
+                @else
+                    <li><a class="nav-link" href="/login">Iniciar Sesión</a></li>
+                @endif
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav>
     </div>
 </header>
 {{--Content--}}
-<div class="container" style="margin-top: 200px;">
-    <div class="row">
-        <div class="col-6 offset-3">
-            <form method="POST" action="{{ route('categorias.update', ['categoria' => $categoria->id]) }}">
-                @csrf
-                @method('PUT')
+@if(Auth::user()->rol == 0)
+    <div class="container" style="margin-top: 200px;">
+        <div class="row">
+            <div class="col-6 offset-3">
+                <form method="POST" action="{{ route('platos.destroy', ['id' => $plato->id]) }}">
+                    @csrf
+                    @method('DELETE')
 
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ $categoria->name }}" required>
-                </div>
+                    <div class="form-group">
+                        <label for="name">Confirme el borrado de <strong>{{$plato->name}}</strong> pulsando el botón a continuación</label>
+                    </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Borrar</button>
+                </form>
 
+            </div>
         </div>
     </div>
-</div>
+@else
+    <h1>Carece del permiso para acceder a esta página.</h1>
+@endif
 {{--End of Content--}}
 <!-- ======= Contacto ======= -->
 <section id="contact" class="contact">

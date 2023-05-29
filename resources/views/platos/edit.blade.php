@@ -44,7 +44,7 @@
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
         <div class="logo me-auto">
-            <h1><a href="/">La Mirilla de Edy</a></h1>
+            <h1><a href="index.html">La Mirilla de Edy</a></h1>
         </div>
 
         <nav id="navbar" class="navbar order-last order-lg-0">
@@ -71,34 +71,65 @@
     </div>
 </header>
 {{--Content--}}
-<div class="container" style="margin-top: 200px;">
-    <div class="row">
-        <div class="col-6 offset-3">
-            <form action="{{ route('register') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Nombre del Usuario:</label>
-                    <input type="text" name="name" id="name" class="form-control" required>
-                </div>
+@if(Auth::user()->rol == 0)
+    <div class="container" style="margin-top: 200px;">
+        <div class="row">
+            <div class="col-6 offset-3">
+                <form method="POST" action="{{ route('platos.update', $plato->id) }}" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div>
+                        <label for="name">Nombre del plato:</label>
+                        <input type="text" name="name" id="name" value="{{ $plato->name }}" required>
+                    </div>
+                    <div>
+                        <label for="ingredients">Ingredientes del plato:</label>
+                        <input type="text" name="ingredients" id="ingredients" value="{{ $plato->ingredients }}" required>
+                    </div>
+                    <div>
+                        <label for="price">Precio del plato:</label>
+                        <input type="number" name="price" id="price" value="{{ $plato->price }}" min="0" step="any" required>
+                    </div>
+                    <div>
+                        <label for="type_id">Tipo al que pertenece:</label>
+                        <select name="type_id" id="type_id" required>
+                            <option value="">Seleccione un tipo</option>
+                            @foreach($tipos as $type)
+                                <option value="{{ $type->id }}" @if($type->id == $plato->type_id) selected @endif>{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="category_id">Categoría a la que pertenecen tanto el tipo como el plato:</label>
+                        <select name="category_id" id="category_id" required>
+                            <option value="">Seleccione una categoría</option>
+                            @foreach($categorias as $category)
+                                <option value="{{ $category->id }}" @if($category->id == $plato->category_id) selected @endif>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="image">Imagen:</label>
+                        <input type="file" name="image" id="image">
+                    </div>
+                    <div>
+                        <label for="alergenos">Alérgenos:</label>
+                        <select name="alergenos[]" id="alergenos" multiple>
+                            @foreach($alergenos as $alergeno)
+                                <option value="{{ $alergeno->id }}" @if(in_array($alergeno->id, $plato->alergenos->pluck('id')->toArray())) selected @endif>{{ $alergeno->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit">Actualizar Plato</button>
+                </form>
 
-                <div class="form-group">
-                    <label for="email">Email del Usuario:</label>
-                    <input type="email" name="email" id="email" class="form-control" required>
-                </div>
 
-                <div class="form-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
-                </div>
-                <div class="d-flex flex-row" >
-                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-                    <p class="px-1" style="padding-top: 7px">O</p>
-                    <a href="/login" class="btn btn-primary">Iniciar Sesión</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+@else
+    <h1>Carece del permiso para acceder a esta página.</h1>
+@endif
 {{--End of Content--}}
 <!-- ======= Contacto ======= -->
 <section id="contact" class="contact">

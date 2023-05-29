@@ -18,7 +18,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/animate.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/bootstrap-icons.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap-icons.css')}}">
     <link rel="stylesheet" href="{{asset('css/boxicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/glightbox.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/swiper-bundle.min.css')}}">
@@ -30,9 +30,9 @@
 <section id="topbar" class="d-flex align-items-center fixed-top topbar-transparent">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-center justify-content-lg-start">
         <a href="https://www.instagram.com/restaurantelamirilladeedy/"><i style="font-size: 23px;"
-                                                                          class="bx bxl-instagram ms-4 d-none d-lg-flex align-items-center"></i></a>
+                                                                          class="bi bi-instagram ms-4 d-none d-lg-flex align-items-center"></i></a>
         <a href="https://www.facebook.com/profile.php?id=100086663724470"><i style="font-size: 23px;"
-                                                                             class="bx bxl-facebook ms-4 d-none d-lg-flex align-items-center"></i></a>
+                                                                             class="bi bi-facebook ms-4 d-none d-lg-flex align-items-center"></i></a>
         <i class="bi bi-phone ms-4 d-none d-lg-flex align-items-center d-none"><a style="color: white;" class="ps-1"
                                                                                   href="tel:919 47 72 18">919 47 72 18</a></i>
         <i class="bi bi-clock ms-4 d-none d-lg-flex align-items-center"><span>Lunes a Viernes: 07.00-00.00 y Sábado
@@ -49,32 +49,56 @@
 
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
-                <li><a class="nav-link scrollto active" href="#hero">Inicio</a></li>
+                <li><a class="nav-link scrollto active" href="/">Inicio</a></li>
+                @if($categorias)
+                    @foreach($categorias as $categoria)
+                        <li><a class="nav-link scrollto" href="#{{strtolower($categoria->name)}}">{{$categoria->name}}</a></li>
+                    @endforeach
+                @endif
                 <li><a class="nav-link scrollto" href="#contact">Visítanos</a></li>
+                @if($authenticated)
+                    <li><a class="nav-link" href="/users">Bienvenido {{Auth::user()->name}}</a></li>
+                    <li><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
+                    @if(Auth::user()->rol == 0)
+                        <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    @endif
+                @else
+                    <li><a class="nav-link" href="/login">Iniciar Sesión</a></li>
+                @endif
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav>
     </div>
 </header>
 {{--Content--}}
-<div class="container" style="margin-top: 200px;">
-    <div class="row">
-        <div class="col-6 offset-3">
-            <form method="POST" action="{{ route('categorias.store') }}">
-                @csrf
-                <div>
-                    <label for="name">Name:</label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}" required>
-                    @error('name')
-                    <span>{{ $message }}</span>
-                    @enderror
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-
+@if(Auth::user()->rol == 0)
+    <div class="container" style="margin-top: 200px;">
+        <div class="row">
+            <div class="col-6 offset-3">
+                <form method="POST" action="{{ route('tipos.update', ['id' => $tipo->id]) }}">
+                    @csrf
+                    @method('PUT')
+                    <div>
+                        <label for="name">Nombre del tipo:</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ $tipo->name }}" required>
+                        <label for="categoria_id">Seleccione la Categoría a la que pertenece:</label>
+                        <select name="categoria_id" id="categoria_id" class="form-control">
+                            <option value="">Seleccione una categoría</option>
+                            @foreach($categorias as $categoria)
+                                <option value="{{ $categoria->id }}" {{ $categoria->id == $tipo->categoria_id ? 'selected' : '' }}>
+                                    {{ $categoria->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit">Actualizar</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+@else
+    <h1>Carece del permiso para acceder a esta página.</h1>
+@endif
 {{--End of Content--}}
 <!-- ======= Contacto ======= -->
 <section id="contact" class="contact">

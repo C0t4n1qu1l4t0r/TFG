@@ -71,34 +71,31 @@
     </div>
 </header>
 {{--Content--}}
-<div class="container" style="margin-top: 200px;">
-    <div class="row">
-        <div class="col-6 offset-3">
-            <form action="{{ route('register') }}" method="POST">
-                @csrf
-                <div class="form-group">
+@if(Auth::id() == $user->id || Auth::user()->rol == 0)
+    <div class="container" style="margin-top: 200px;">
+        <div class="row">
+            <div class="col-6 offset-3">
+                <form method="POST" action="{{ route('users.update', ['id' => $user->id]) }}">
+                    @csrf
+                    @method('PUT')
+
                     <label for="name">Nombre del Usuario:</label>
-                    <input type="text" name="name" id="name" class="form-control" required>
-                </div>
+                    <input type="text" name="name" id="name" value="{{ $user->name }}">
 
-                <div class="form-group">
                     <label for="email">Email del Usuario:</label>
-                    <input type="email" name="email" id="email" class="form-control" required>
-                </div>
+                    <input type="email" name="email" id="email" value="{{ $user->email }}">
 
-                <div class="form-group">
                     <label for="password">Contraseña:</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
-                </div>
-                <div class="d-flex flex-row" >
-                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-                    <p class="px-1" style="padding-top: 7px">O</p>
-                    <a href="/login" class="btn btn-primary">Iniciar Sesión</a>
-                </div>
-            </form>
+                    <input type="password" name="password" id="password">
+
+                    <button type="submit">Actualizar Usuario</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+@else
+    <h1>Carece del permiso para acceder a esta página.</h1>
+@endif
 {{--End of Content--}}
 <!-- ======= Contacto ======= -->
 <section id="contact" class="contact">

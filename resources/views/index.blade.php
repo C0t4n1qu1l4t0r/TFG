@@ -5,7 +5,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Restaurante La Mirilla de Edy en Madrid - Restaurante, Comer, Cenar, Desayunar, Café, Alérgenos, Madrid</title>
+    <title>Restaurante La Mirilla de Edy en Madrid - Restaurante, Comer, Cenar, Desayunar, Café, Alérgenos,
+        Madrid</title>
     <meta
         content="Bienvenido a nuestro restaurante ubicado cerca del centro comercial H2Ocio, en el que disfrutaras de amables camareros y deliciosa comida.
     Desayunos, comidas, almuerzos, cenas o a la hora que prefieras estaremos encantados de recibirte y servirte con nuestros deliciosos productos."
@@ -18,7 +19,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/animate.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/bootstrap-icons.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap-icons.css')}}">
     <link rel="stylesheet" href="{{asset('css/boxicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/glightbox.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/swiper-bundle.min.css')}}">
@@ -27,19 +28,21 @@
 </head>
 @if(!$categorias)
     <script type="text/javascript">
-        window.location = "{ url('/categorias/create') }";//here double curly bracket
+        window.location = "{{url('/categorias/create')}}";//here double curly bracket
     </script>
 @else
     <body>
     <!-- ======= Top Bar ======= -->
     <section id="topbar" class="d-flex align-items-center fixed-top topbar-transparent">
-        <div class="container-fluid container-xl d-flex align-items-center justify-content-center justify-content-lg-start">
-            <a href="https://www.instagram.com/restaurantelamirilladeedy/"><i style="font-size: 23px;"
-                                                                              class="bx bxl-instagram ms-4 d-none d-lg-flex align-items-center"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=100086663724470"><i style="font-size: 23px;"
-                                                                                 class="bx bxl-facebook ms-4 d-none d-lg-flex align-items-center"></i></a>
+        <div
+            class="container-fluid container-xl d-flex align-items-center justify-content-center justify-content-lg-start">
+            <a href="https://www.instagram.com/restaurantelamirilladeedy/"><i style="font-size: 18px;"
+                                                                              class="bi bi-instagram ms-4 d-none d-lg-flex align-items-center"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=100086663724470"><i style="font-size: 18px;"
+                                                                                 class="bi bi-facebook ms-4 d-none d-lg-flex align-items-center"></i></a>
             <i class="bi bi-phone ms-4 d-none d-lg-flex align-items-center d-none"><a style="color: white;" class="ps-1"
-                                                                                      href="tel:919 47 72 18">919 47 72 18</a></i>
+                                                                                      href="tel:919 47 72 18">919 47 72
+                    18</a></i>
             <i class="bi bi-clock ms-4 d-none d-lg-flex align-items-center"><span>Lunes a Viernes: 07.00-00.00 y Sábado
           08.00-00.00</span></i>
         </div>
@@ -49,18 +52,28 @@
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
             <div class="logo me-auto">
-                <h1><a href="index.html">La Mirilla de Edy</a></h1>
+                <h1><a href="/">La Mirilla de Edy</a></h1>
             </div>
 
             <nav id="navbar" class="navbar order-last order-lg-0">
                 <ul>
-                    <li><a class="nav-link scrollto active" href="#hero">Inicio</a></li>
+                    <li><a class="nav-link scrollto active" href="/">Inicio</a></li>
                     @if($categorias)
                         @foreach($categorias as $categoria)
-                            <li><a class="nav-link scrollto" href="#{{strtolower($categoria->name)}}">{{$categoria->name}}</a></li>
+                            <li><a class="nav-link scrollto"
+                                   href="#{{strtolower($categoria->name)}}">{{$categoria->name}}</a></li>
                         @endforeach
                     @endif
                     <li><a class="nav-link scrollto" href="#contact">Visítanos</a></li>
+                    @if($authenticated)
+                        <li><a class="nav-link" href="/users">Bienvenido {{Auth::user()->name}}</a></li>
+                        <li><a class="nav-link" href="/logout">Cerrar Sesión</a></li>
+                        @if(Auth::user()->rol == 0)
+                            <li><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                        @endif
+                    @else
+                        <li><a class="nav-link" href="/login">Iniciar Sesión</a></li>
+                    @endif
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav>
@@ -79,37 +92,17 @@
                     <div class="carousel-item active" style="background-image: url({{ asset('images/barra.jpg') }});">
                         <div class="carousel-container">
                             <div class="carousel-content">
-                                <h2 class="animate__animated animate__fadeInDown"><span>Restaurante la Mirilla de Edy</span></h2>
+                                <h2 class="animate__animated animate__fadeInDown">
+                                    <span>Restaurante la Mirilla de Edy</span></h2>
                                 <p class="animate__animated animate__fadeInUp"></p>
                                 <div>
-                                    <a href="#menú" class="btn-menu animate__animated animate__fadeInUp scrollto">Nuestra Carta</a>
+                                    <a href="#menú" class="btn-menu animate__animated animate__fadeInUp scrollto">Nuestra
+                                        Carta</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Slide 2 -->
-                    <div class="carousel-item" style="background-image: url({{ asset('images/interior2.jpg') }});">
-                    </div>
-
-                    <!-- Slide 3 -->
-                    <div class="carousel-item" style="background-image: url({{ asset('images/exterior.jpg') }});">
-                    </div>
-
-                    <!-- Slide 4 -->
-                    <div class="carousel-item" style="background-image: url({{ asset('images/barra4.jpg') }});">
-                    </div>
-
                 </div>
-
-                <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
-                </a>
-
-                <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
-                    <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
-                </a>
-
             </div>
         </div>
     </section>
@@ -120,7 +113,8 @@
                 <div class="container">
                     <div class="section-title">
                         <h2>Nuestro <span>{{$categoria->name}}</span></h2>
-                        <p style="font-weight:bold; font-style: italic;">*Las consumiciones en terraza tienen un coste adicional al de la carta</p>
+                        <p style="font-weight:bold; font-style: italic;">*Las consumiciones en terraza tienen un coste
+                            adicional al de la carta</p>
                     </div>
                     @if($tipos)
                         <div class="row">
@@ -137,39 +131,52 @@
                         </div>
                     @endif
                     @if ($platos)
-                        <div class="{{$categoria->name}}-container">
+                        <div @if($categoria->name == "Menú") class="row menu-container" @else class="row almuerzo-container" @endif>
                             @foreach($tipos as $tipo)
                                 @if ($tipo->categoria_id == $categoria->id)
                                     <div class="col-lg-4 menu-item filter-{{strtolower($tipo->name)}} mt-2">
                                         <h2 style="text-align: center;">{{$tipo->name}}</h2>
-                                    </div>
                                 @endif
                                 @foreach($platos as $plato)
                                     @if($plato->type_id == $tipo->id && $plato->category_id == $categoria->id)
-                                        <div class="{{$categoria->name}}-content">
-                                            <a>{{$plato->name}}</a><span>{{$plato->price}}€</span>
+                                        <div @if($categoria->name == "Menú") class="menu-content" @else class="almuerzo-content" @endif>
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#imageModal{{$plato->id}}">{{$plato->name}}</a>
+                                            <span>{{$plato->price}}€</span>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="imageModal{{$plato->id}}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel{{$plato->id}}" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="imageModalLabel{{$plato->id}}">{{$plato->name}} Image</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <img src="{{$plato->image}}" alt="{{$plato->name}} Image" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                         </div>
-                                        <div class="{{$categoria->name}}-ingredients">
+                                        <div @if($categoria->name == "Menú") class="menu-ingredients" @else class="almuerzo-ingredients" @endif>
                                             @if($plato->ingredients)
-                                                <p style="color:white;">
+                                                <p style="color:#948c81;">
                                                     {{$plato->ingredients}}
                                                 </p>
                                             @else
                                                 <br>
                                             @endif
-                                            @if($plato->alergens_id)
-                                                @php
-                                                    $filename = App\Http\Controllers\AlergenoController::getFilename($plato->alergens_id);
-                                                    $path = asset('/images/' . $filename);
-                                                @endphp
-                                                <img src="{{$path}}" alt="Imagen alergeno">
-                                            @else
-                                                <br>
-                                            @endif
+                                            @foreach($plato->alergenos as $alergeno)
+                                                <img src="{{ asset('images/' . $alergeno->image) }}"
+                                                     alt="Imagen alergeno" class="alergenos">
+                                            @endforeach
                                         </div>
                                     @endif
                                 @endforeach
+                                    </div>
                             @endforeach
                         </div>
                 </div>
@@ -206,12 +213,12 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
-    <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('js/glightbox.min.js')}}"></script>
-    <script src="{{asset('js/isotope.pkgd.min.js')}}"></script>
-    <script src="{{asset('js/swiper-bundle.min.js')}}"></script>
-    <script src="{{ asset('js/validate.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script type="module" src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+    <script type="module" src="{{asset('js/glightbox.min.js')}}"></script>
+    <script type="module" src="{{asset('js/isotope.pkgd.min.js')}}"></script>
+    <script type="module" src="{{asset('js/swiper-bundle.min.js')}}"></script>
+    <script type="module" src="{{ asset('js/validate.js') }}"></script>
+    <script type="module" src="{{asset('js/app.js')}}"></script>
 
 
     </body>

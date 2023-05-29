@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categoria;
+use Illuminate\Support\Facades\Auth;
 
 class CategoriaController extends Controller
 {
@@ -15,7 +16,9 @@ class CategoriaController extends Controller
 
     public function create()
     {
-        return view('new-categoria');
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('categorias/new',compact('categorias','authenticated'));
     }
 
     public function store(Request $request)
@@ -33,7 +36,9 @@ class CategoriaController extends Controller
     public function edit($id)
     {
         $categoria = Categoria::findOrFail($id);
-        return view('edit-categoria', compact('categoria'));
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('categorias/edit', compact('categoria','categorias','authenticated'));
     }
 
     public function update(Request $request, $id)
@@ -49,8 +54,16 @@ class CategoriaController extends Controller
             ->with('success', 'Categoria updated successfully.');
     }
 
-    public function destroy(Categoria $categoria)
+    public function delete($id){
+        $categoria = Categoria::findOrFail($id);
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('categorias/delete', compact('categoria','categorias','authenticated'));
+    }
+
+    public function destroy($id)
     {
+        $categoria = Categoria::findOrFail($id);
         $categoria->delete();
 
         return redirect()->route('index')

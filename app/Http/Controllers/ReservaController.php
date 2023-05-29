@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Reserva;
+use App\Models\Turno;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservaController extends Controller
 {
@@ -15,7 +18,22 @@ class ReservaController extends Controller
     public function index()
     {
         $reservas = Reserva::all();
-        return view('reservas', compact('reservas'));
+
+        return $reservas;
+    }
+
+    public function reservas(){
+
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+
+        if (Auth::user()->rol == 0){
+            $reservas = Reserva::all();
+        }else{
+            $reservas = Reserva::where('user_id', Auth::id())->get();
+        }
+
+        return view('reservas',compact('reservas','categorias','authenticated'));
     }
 
     /**
@@ -25,7 +43,11 @@ class ReservaController extends Controller
      */
     public function create()
     {
-        return view('reservar');
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        $turnos = Turno::all();
+
+        return view('reservar',compact('categorias','authenticated','turnos'));
     }
 
     /**
@@ -38,7 +60,6 @@ class ReservaController extends Controller
     {
         $turnoId = $request->input('turno_id');
 
-        // Check if the selected turn is available
         $reservedPersons = Reserva::where('turno_id', $turnoId)->sum('numPersonas');
         $availableSlots = 20 - $reservedPersons;
 
@@ -46,11 +67,10 @@ class ReservaController extends Controller
             return back()->with('error', 'El turno seleccionado está ocupado, por favor seleccione otro turno.');
         }
 
-        // Create the reservation
         $reserva = new Reserva();
         $reserva->fecha = $request->input('fecha');
         $reserva->numPersonas = $request->input('numPersonas');
-        $reserva->user_id = $request->input('user_id');
+        $reserva->user_id = Auth::id();
         $reserva->turno_id = $turnoId;
         $reserva->save();
 

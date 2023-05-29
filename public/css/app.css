@@ -391,6 +391,7 @@ h6 {
     background-color: rgba(39, 37, 34, 0.8);
     overflow: hidden;
     padding: 0;
+    margin-top: 0;
 }
 
 #hero .carousel-item {
@@ -1708,6 +1709,38 @@ section {
 }
 
 .alergenos{
-    max-height: 20px;
-    max-width: 20px;
+    max-height: 45px;
+    max-width: 45px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 25px;
+    border: 3px dotted #ffb03b;
+}
+form div{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+form button{
+    width: 25%;
+}
+form div label, form div input{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#header,
+#topbar{
+    background: rgba(26, 24, 22, 0.85) !important;
+}
+body section:nth-of-type(2){
+    margin-top: 20px;
+}
+body section:nth-of-type(2) section{
+    margin-top: 0;
+}
+body section:nth-of-type(2) section.col-6 div div.w-100{
+    padding: 35px;
 }

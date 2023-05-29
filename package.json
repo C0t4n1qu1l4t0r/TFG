@@ -1,5 +1,6 @@
 {
     "private": true,
+    "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
@@ -11,7 +12,8 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "isotope-layout": "^3.0.6"
+        "isotope-layout": "^3.0.6",
+        "jquery": "^3.7.0"
     },
     "engines": {
         "node": "18.13.0",

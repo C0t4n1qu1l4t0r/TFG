@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use App\Models\Turno;
+use Illuminate\Support\Facades\Auth;
 
 class TurnoController extends Controller
 {
@@ -11,49 +13,59 @@ class TurnoController extends Controller
     {
         $turnos = Turno::all();
 
-        return view('reservar', compact('turnos'));
+        return $turnos;
     }
 
     public function create()
     {
-        return view('new');
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('turnos/new',compact('categorias','authenticated'));
     }
 
     public function store(Request $request)
     {
-        $turno = Turno::create([
-            'hora_inicio' => $request->input('hora_inicio'),
-            'hora_fin' => $request->input('hora_fin')
+        $request->validate([
+            'hora' => 'required',
         ]);
 
-        return redirect()->route('reservar')->with('success', 'Turno created successfully.');
+        Turno::create($request->all());
+
+        return redirect()->route('index')->with('success', 'Turno created successfully.');
     }
 
     public function edit($id)
     {
-        $turno = Turno::find($id);
-
-        return view('edit', compact('turno'));
+        $turno = Turno::findOrFail($id);
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('turnos/edit', compact('turno','categorias','authenticated'));
     }
 
     public function update(Request $request, $id)
     {
-        $turno = Turno::find($id);
+        $request->validate([
+            'hora' => 'required',
+        ]);
+        $turno = Turno::findOrFail($id);
+        $turno->update($request->all());
 
-        $turno->hora_inicio = $request->input('hora_inicio');
-        $turno->hora_fin = $request->input('hora_fin');
+        return redirect()->route('index')->with('success', 'Turno updated successfully.');
+    }
 
-        $turno->save();
-
-        return redirect()->route('reservar')->with('success', 'Turno updated successfully.');
+    public function delete($id){
+        $turno = Turno::findOrFail($id);
+        $categorias = Categoria::all();
+        $authenticated = Auth::check();
+        return view('turnos/delete', compact('turno','categorias','authenticated'));
     }
 
     public function destroy($id)
     {
-        $turno = Turno::find($id);
+        $turno = Turno::findOrFail($id);
 
         $turno->delete();
 
-        return redirect()->route('reservar')->with('success', 'Turno deleted successfully.');
+        return redirect()->route('index')->with('success', 'Turno deleted successfully.');
     }
 }

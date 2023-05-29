@@ -28,7 +28,7 @@
 </head>
 @if(!$categorias)
     <script type="text/javascript">
-        window.location = "{{url('/categorias/create')}}";
+        window.location = "{{url('/categorias/create')}}";//here double curly bracket
     </script>
 @else
     <body>
@@ -80,18 +80,109 @@
         </div>
     </header>
     {{--Content--}}
-    @if($authenticated)
+    @if(Auth::user()->rol == 0)
         <section class="container-fluid d-flex flex-row flex-wrap">
-            <section class="col-12">
-                <h2 class="text-center">Sus Reservas</h2>
-                <div class="row">
-                    @foreach($reservas as $reserva)
-                        <div class="d-flex flex-column {{ $loop->count > 1 ? 'col-4' : 'col-6 offset-3 align-items-center' }}">
-                            <strong class="px-5">{{$reserva->fecha}}</strong>
-                            <p>Número de comensales: {{$reserva->numPersonas}}</p>
-                            <p>Hora de la Reserva:{{ $reserva->turno->hora }}</p>
+            <section class="col-6">
+                <div>
+                    <h2 class="text-center">Alérgenos <br><br><a href="/alergenos/create" class="btn btn-success">Añadir
+                            nuevo</a></h2>
+                    @foreach($alergenos as $alergeno)
+                        <div class="d-flex justify-content-between w-100">
+                            <strong class="px-5">{{$alergeno->name}}</strong>
+                            <div>
+                                <a href="/alergenos/{{$alergeno->id}}/edit" class="btn btn-info">Editar</a>
+                                <a href="/alergenos/{{$alergeno->id}}/delete" class="btn btn-danger">Borrar</a>
+                            </div>
                         </div>
-
+                    @endforeach
+                </div>
+            </section>
+            <section class="col-6">
+                <div>
+                    <h2 class="text-center">Categorias <br><br><a href="/categorias/create" class="btn btn-success">Añadir
+                            nuevo</a></h2>
+                    @foreach($categorias as $categoria)
+                        <div class="d-flex justify-content-between w-100">
+                            <strong class="px-5">{{$categoria->name}}</strong>
+                            <div>
+                                <a href="/categorias/{{$categoria->id}}/edit" class="btn btn-info">Editar</a>
+                                <a href="/categorias/{{$categoria->id}}/delete" class="btn btn-danger">Borrar</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+            <section class="col-6">
+                <div>
+                    <h2 class="text-center">Platos <br><br><a href="/platos/create" class="btn btn-success">Añadir nuevo</a>
+                    </h2>
+                    @foreach($platos as $plato)
+                        <div class="d-flex justify-content-between w-100">
+                            <strong class="px-5">{{$plato->name}}</strong>
+                            <div>
+                                <a href="/platos/{{$plato->id}}/edit" class="btn btn-info">Editar</a>
+                                <a href="/platos/{{$plato->id}}/delete" class="btn btn-danger">Borrar</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+            <section class="col-6">
+                <div>
+                    <h2 class="text-center">Reservas <br><br><a href="/reservar" class="btn btn-success">Añadir
+                            nuevo</a></h2>
+                    @foreach($reservas as $reserva)
+                        <div class="d-flex justify-content-between w-100">
+                            <strong class="px-5">{{$reserva->fecha}}</strong>
+                            <div>
+                                <a href="/reservas" class="btn btn-info">Ver</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+            <section class="col-6">
+                <div>
+                    <h2 class="text-center">Tipos <br><br><a href="/tipos/create" class="btn btn-success">Añadir nuevo</a>
+                    </h2>
+                    @foreach($tipos as $tipo)
+                        <div class="d-flex justify-content-between w-100">
+                            <strong class="px-5">{{$tipo->name}}</strong>
+                            <div>
+                                <a href="/tipos/{{$tipo->id}}/edit" class="btn btn-info">Editar</a>
+                                <a href="/tipos/{{$tipo->id}}/delete" class="btn btn-danger">Borrar</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+            <section class="col-6">
+                <div>
+                    <h2 class="text-center">Turnos <br><br><a href="/turnos/create" class="btn btn-success">Añadir nuevo</a>
+                    </h2>
+                    @foreach($turnos as $turno)
+                        <div class="d-flex justify-content-between w-100">
+                            <strong class="px-5">{{$turno->hora}}</strong>
+                            <div>
+                                <a href="/turnos/{{$turno->id}}/edit" class="btn btn-info">Editar</a>
+                                <a href="/turnos/{{$turno->id}}/delete" class="btn btn-danger">Borrar</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+            <section class="col-6 mx-auto d-flex justify-content-center">
+                <div>
+                    <h2 class="text-center">Usuarios <br><br><a href="/users/create" class="btn btn-success">Añadir
+                            nuevo</a></h2>
+                    @foreach($users as $user)
+                        <div class="d-flex justify-content-between w-100">
+                            <strong class="px-5">{{$user->name}}</strong>
+                            <div>
+                                <a href="/users/{{$user->id}}/edit" class="btn btn-info">Editar</a>
+                                <a href="/users/{{$user->id}}/delete" class="btn btn-danger">Borrar</a>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
             </section>

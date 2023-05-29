@@ -71,34 +71,85 @@
     </div>
 </header>
 {{--Content--}}
-<div class="container" style="margin-top: 200px;">
-    <div class="row">
-        <div class="col-6 offset-3">
-            <form action="{{ route('register') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Nombre del Usuario:</label>
-                    <input type="text" name="name" id="name" class="form-control" required>
-                </div>
+@if(Auth::user()->rol == 0)
+    <div class="container" style="margin-top: 200px;">
+        <div class="row">
+            <div class="col-6 offset-3">
+                <form method="POST" action="{{ route('platos.store') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div>
+                        <label for="name">Nombre del plato:</label>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+                        @error('name')
+                        <span>{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="ingredients">Ingredientes del plato:</label>
+                        <textarea name="ingredients" id="ingredients">{{ old('ingredients') }}</textarea>
+                        @error('ingredients')
+                        <span>{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="price">Precio del plato:</label>
+                        <input type="number" name="price" id="price" value="{{ old('price') }}" min="0" step="any" required>
+                        @error('price')
+                        <span>{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="image">Imagen del plato:</label>
+                        <input type="file" name="image" id="image">
+                        @error('image')
+                        <span>{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="type_id">Tipo al que pertenece:</label>
+                        <select name="type_id" id="type_id" required>
+                            <option value="">Seleccione un tipo</option>
+                            @foreach($tipos as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('type_id')
+                        <span>{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="category_id">Categoría a la que pertenecen tanto el tipo como el plato:</label>
+                        <select name="category_id" id="category_id" required>
+                            <option value="">Seleccione una categoría</option>
+                            @foreach($categorias as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                        <span>{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="alergenos">Alérgenos:</label>
+                        <select name="alergenos[]" id="alergenos" multiple>
+                            @foreach($alergenos as $alergeno)
+                                <option value="{{ $alergeno->id }}">{{ $alergeno->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('alergenos')
+                        <span>{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <button type="submit">Enviar</button>
+                </form>
 
-                <div class="form-group">
-                    <label for="email">Email del Usuario:</label>
-                    <input type="email" name="email" id="email" class="form-control" required>
-                </div>
 
-                <div class="form-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
-                </div>
-                <div class="d-flex flex-row" >
-                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-                    <p class="px-1" style="padding-top: 7px">O</p>
-                    <a href="/login" class="btn btn-primary">Iniciar Sesión</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+@else
+    <h1>Carece del permiso para acceder a esta página.</h1>
+@endif
 {{--End of Content--}}
 <!-- ======= Contacto ======= -->
 <section id="contact" class="contact">
