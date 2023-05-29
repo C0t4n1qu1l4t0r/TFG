@@ -185,7 +185,7 @@
                                                 <br>
                                             @endif
                                             @foreach($plato->alergenos as $alergeno)
-                                                <img src="{{ asset('images/' . $alergeno->image) }}"
+                                                <img src="{{asset('images/' . $alergeno->image)}}"
                                                      alt="Imagen alergeno" class="alergenos">
                                             @endforeach
                                         </div>
