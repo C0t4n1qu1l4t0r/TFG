@@ -220,8 +220,18 @@
     <script type="module" src="{{asset('js/swiper-bundle.min.js')}}"></script>
     <script type="module" src="{{ asset('js/validate.js') }}"></script>
     <script type="module" src="{{asset('js/app.js')}}"></script>
+    <script>
+        window.onload = function() {
+            var mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            var navbar = document.querySelector('#navbar');
 
-
+            mobileNavToggle.addEventListener('click', function(e) {
+                navbar.classList.toggle('navbar-mobile');
+                this.classList.toggle('bi-list');
+                this.classList.toggle('bi-x');
+            });
+        };
+    </script>
     </body>
 @endif
 </html>

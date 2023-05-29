@@ -1,7 +1,7 @@
 import './bootstrap.js';
-(function() {
+window.onload = function() {
     "use strict";
-
+    console.log("uwu");
     /**
      * Easy selector helper function
      */
@@ -241,4 +241,4 @@ import './bootstrap.js';
         }
     });
 
-})()
+}
